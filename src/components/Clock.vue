@@ -47,7 +47,13 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family:'ta';
+  src: url("../assets/Modernist.otf");
+}
+
 .Clock{
+  font-family: ta;
   position: fixed;
   left:50%;
   top: 50%;
@@ -56,6 +62,6 @@ export default {
 }
 .Time{
   display:flex;
-  font-size:100px;
+  font-size:100px ;
 }
 </style>

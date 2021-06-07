@@ -2,17 +2,21 @@
   <div id="app">
     <RangeUI/>
     <Clock/>
+    <ToolBar/>
   </div>
 </template>
 
 <script>
 import RangeUI from './components/RangeUI.vue'
 import Clock from './components/Clock.vue'
+import ToolBar from './components/ToolBar.vue'
+
 export default {
   name: 'App',
   components: {
     Clock,
     RangeUI,
+    ToolBar,
   }
 }
 </script>
@@ -28,8 +32,8 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: white;
   position:relatives;
+  height: 100%;
 }
 </style>
