@@ -58,10 +58,10 @@ export default {
   left:50%;
   top: 50%;
   transform: translateY(-50%) translateX(-50%);
-  color:white;
 }
 .Time{
   display:flex;
-  font-size:100px ;
+  font-size:100px;
+
 }
 </style>
