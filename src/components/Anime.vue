@@ -1,15 +1,11 @@
 <template>
-  <div class="Anime">
-    <div class="">
-      <div id="motionPath">
-        <div class="motion-path">
-          <div class="square small el follow-path"></div>
-          <svg width="256" height="112" viewBox="0 0 256 112">
-            <path fill="none" stroke="currentColor" stroke-width="1" d="M8,56 C8,33.90861 25.90861,16 48,16 C70.09139,16 88,33.90861 88,56 C88,78.09139 105.90861,92 128,92 C150.09139,92 160,72 160,56 C160,40 148,24 128,24 C108,24 96,40 96,56 C96,72 105.90861,92 128,92 C154,93 168,78 168,56 C168,33.90861 185.90861,16 208,16 C230.09139,16 248,33.90861 248,56 C248,78.09139 230.09139,96 208,96 L48,96 C25.90861,96 8,78.09139 8,56 Z"></path>
-          </svg>
-        </div>
-      </div>
-    </div>
+  <div class="Anime" ref="Anime" @click="callMode">
+    <!-- <svg width="1000" height="1000" xmlns="http://www.w3.org/2000/svg" id="abc">
+      <path d="M 150 250
+A 100 100 0 1 0 350 250
+A 100 100 0 1 0 150 250
+" stroke="black" fill="transparent" id="warai"/>
+    </svg> -->
   </div>
 </template>
 
@@ -19,51 +15,200 @@ import anime from 'animejs';
 export default {
   data() {
     return {
+      frameX:0,
+      frameY:0,
+      mode:1,
+      ougiR:420
     }
   },
   mounted(){
-    var path = anime.path('#motionPath path');
+    //svgエレメントの作成
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg:svg")
+    this.frameX=this.$refs.Anime.clientWidth
+    this.frameY=this.$refs.Anime.clientHeight
+    svg.setAttribute('width',this.frameX)
+    svg.setAttribute('height',this.frameY)
+    svg.setAttribute('id','svg')
+    this.$refs.Anime.appendChild(svg)
 
-    var motionPath = anime({
-      targets: '#motionPath .el',
-      translateX: path('x'),
-      translateY: path('y'),
-      rotate: path('angle'),
-      easing: 'linear',
-      duration: 2000,
-      loop: true
+
+
+    var lineDrawing = anime({
+      targets: '#warai',
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: 'easeInOutExpo',
+      duration: 1000,
+      delay: function(el, i) { return i * 150 },
     });
+
+    this.ougi()
+    // let timerID = setInterval(this.modeMGMT, 7000);
+  },
+  methods:{
+    callMode(){
+      switch (this.mode) {
+        case 0:
+          this.bezierClick()
+          break;
+        case 1:
+          this.ougiClick()
+          break;
+        case 2:
+          this.garconClick()
+          break;
+      }
+    },
+    bezier(){
+      console.log("おちゃんせすっす")
+      this.createBZPath(0,0,Math.floor(this.frameX/2)-400,0,Math.floor(this.frameX/2)-400,this.frameY,0,this.frameY)
+      this.createBZPath(this.frameX,0,Math.floor(this.frameX/2)+400,0,Math.floor(this.frameX/2)+400,this.frameY,this.frameX,this.frameY)
+      this.createBZPath(0,0,0,Math.floor(this.frameY/2)-150,this.frameX,Math.floor(this.frameY/2)-150,this.frameX,0)
+      this.createBZPath(0,this.frameY,0,Math.floor(this.frameY/2)+150,this.frameX,Math.floor(this.frameY/2)+150,this.frameX,this.frameY)
+      // this.createBZPath(0,0,0,Math.floor(this.frameY/2),Math.floor(this.frameX/2),this.frameY,this.frameX,this.frameY)
+      // this.createBZPath(this.frameX,0,this.frameX,Math.floor(this.frameY/2),Math.floor(this.frameX/2),this.frameY,0,this.frameY)
+      // this.createBZPath(0,this.frameY,0,Math.floor(this.frameY/2),Math.floor(this.frameX/2),0,this.frameX,0)
+      // this.createBZPath(this.frameX,this.frameY,this.frameX,Math.floor(this.frameY/2),Math.floor(this.frameX/2),0,0,0)
+      var lineDrawing = anime({
+        targets: '#svg path',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutExpo',
+        duration: 1000,
+        delay: function(el, i) { return i * 150 },
+      });
+    },
+    bezierClick(){
+      let seed=Math.floor(Math.random() * 201) - 100
+      let seed1=Math.floor(Math.random() * 201) - 100
+      let seed2=Math.floor(Math.random() * 201) - 100
+      let seed3=Math.floor(Math.random() * 201) - 100
+
+      switch (Math.floor(Math.random() * 8)) {
+        case 0:
+          this.createBZPath(0,0,Math.floor(this.frameX/2)-400+seed,0+seed1,Math.floor(this.frameX/2)-400+seed2,this.frameY+seed3,0,this.frameY)
+          break;
+        case 1:
+          this.createBZPath(this.frameX,0,Math.floor(this.frameX/2)+400+seed,0+seed1,Math.floor(this.frameX/2)+400+seed2,this.frameY+seed3,this.frameX,this.frameY)
+          break;
+        case 2:
+          this.createBZPath(0,0,0+seed,Math.floor(this.frameY/2)-150+seed1,this.frameX+seed2,Math.floor(this.frameY/2)-150+seed3,this.frameX,0)
+          break;
+        case 3:
+          this.createBZPath(0,this.frameY,0+seed,Math.floor(this.frameY/2)+150+seed1,this.frameX+seed2,Math.floor(this.frameY/2)+150+seed3,this.frameX,this.frameY)
+          break;
+        case 4:
+          this.createBZPath(0,0,0+seed,Math.floor(this.frameY/2)+seed1,Math.floor(this.frameX/2)+seed2,this.frameY+seed3,this.frameX,this.frameY)
+          break;
+        case 5:
+          this.createBZPath(this.frameX,0,this.frameX+seed,Math.floor(this.frameY/2)+seed1,Math.floor(this.frameX/2)+seed2,this.frameY+seed3,0,this.frameY)
+          break;
+        case 6:
+          this.createBZPath(0,this.frameY,0+seed,Math.floor(this.frameY/2)+seed1,Math.floor(this.frameX/2)+seed2,0+seed3,this.frameX,0)
+          break;
+        case 7:
+          this.createBZPath(this.frameX,this.frameY,this.frameX+seed,Math.floor(this.frameY/2)+seed1,Math.floor(this.frameX/2)+seed2,0+seed3,0,0)
+          break;
+        default:
+          break;
+      }
+    },
+    //bezierのpath作る
+    createBZPath(a,b,c,d,e,f,g,h){
+      let path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('stroke','black')
+      path.setAttribute('fill','transparent')
+      let root="M "+a+" "+b+" C "+c+" "+d+", "+e+" "+f+", "+g+" "+h
+      path.setAttribute('d',root)
+      document.getElementById('svg').appendChild(path)
+    },
+    ougi(){
+      console.log("おちゃんせすっす")
+      this.createCirclePath(420,90,1)
+      let lineDrawing = anime({
+        targets: '#svg path',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutExpo',
+        duration: 1000,
+        delay: function(el, i) { return i * 150 },
+      });
+    },
+    ougiClick(){
+      this.ougiR=this.ougiR+10
+      let angle=Math.PI*3/4+Math.random()*1.04666-0.52333
+      let angle1=-Math.PI*2/3+Math.random()*1.04666-0.52333
+      Math.max(Math.PI*2/3,angle)
+      Math.max(Math.PI/3,angle1)
+      this.createOugiPath(this.ougiR,angle,angle1)
+      let id='#'+'P'+this.ougiR
+      console.log(angle)
+      var lineng = anime({
+        targets: id,
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutExpo',
+        duration: 1000,
+        delay: function(el, i) { return i * 150 },
+      });
+    },
+    createCirclePath(r,a,d){//radius angle direction
+      let c=Math.cos(a)
+      let s=Math.sin(a)
+      let x= this.frameX/2+r*c
+      let y= this.frameY/2-r*s
+      let x1= this.frameX/2-r*c
+      let y1= this.frameY/2+r*s
+      let path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('stroke','gray')
+      path.setAttribute('fill','transparent')
+      path.setAttribute('stroke-width','11px')
+      let id='P'+r
+      console.log(id)
+      path.setAttribute('id',id)
+      let root="M "+x+" "+y+" A "+r+" "+r+" "+0+" "+1+" "+d+" "+x1+" "+y1+" A "+r+" "+r+" "+0+" "+1+" "+d+" "+x+" "+y
+      path.setAttribute('d',root)
+      document.getElementById('svg').appendChild(path)
+    },
+    createOugiPath(r,a,a1){//radius angle direction
+      let x= this.frameX/2+r*Math.cos(a)
+      let y= this.frameY/2-r*Math.sin(a)
+      let x1= this.frameX/2+r*Math.cos(a1)
+      let y1= this.frameY/2-r*Math.sin(a1)
+      let path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('stroke','gray')
+      path.setAttribute('fill','transparent')
+      path.setAttribute('stroke-width','11px')
+      let id='P'+r
+      console.log(id)
+      path.setAttribute('id',id)
+      let root="M "+x+" "+y+" A "+r+" "+r+" "+0+" "+1+" "+1+" "+x1+" "+y1
+      path.setAttribute('d',root)
+      document.getElementById('svg').appendChild(path)
+    },
+    calcPosi(){
+
+    }
+
   },
   update(){
 
+  },
+  computed:{
   }
 }
-</script>
+</script>]
 
-<style lang="scss">
+
+
+<style >
 .Anime{
-  font-family: ta;
-  position: fixed;
   width:100%;
   height: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: ta;
 }
-.square {
-  pointer-events: none;
-  width: 28px;
-  height: 28px;
-  margin: 1px;
-  font-size: 12px;
+.svg{
+  width:500px;
+  height: 500px;
 }
-
-.small {
-  width: 18px;
-  height: 18px;
-}
-
-.follow-path {
-  position: absolute;
-  top: -9px;
-  left: -9px;
-}
-
 </style>
