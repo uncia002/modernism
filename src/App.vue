@@ -3,7 +3,7 @@
     <!-- <RangeUI/> -->
     <Anime/>
     <Clock/>
-    <ToolBar/>
+    <!-- <ToolBar/> -->
   </div>
 </template>
 
@@ -31,10 +31,10 @@ html{
 }
 body{
   margin: 0;
-  padding: 20px;
   height: 100%;
   background-color:#EEEEEE;
   overflow-y: hidden;
+  user-select: none;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -42,8 +42,7 @@ body{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: black;
-  height: calc(100% - 50px);
   width: 100%;
-  border: 1px black solid;
+  height: 100%;
 }
 </style>
